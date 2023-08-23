@@ -24,6 +24,7 @@ import {
   POSTAddProduct,
   GETAllProducts,
   GETProductById,
+  POSTUpdateProduct,
 } from "../controller/adminController.js";
 
 import { fileURLToPath } from "url";
@@ -113,6 +114,6 @@ adminrouter.post(
 );
 adminrouter.get("/getallproducts", userAuth, GETAllProducts);
 adminrouter.get("/getproductbyid/:id", userAuth, GETProductById);
-
+adminrouter.put("/updateproduct/:id", userAuth, POSTUpdateProduct);
 //pending updation of products...
 export default adminrouter;

@@ -508,6 +508,25 @@ export const POSTAddProduct = async (req, res) => {
       message: "Please Upload Images",
     });
   }
+
+  let productValidationRules = {
+    product_name: "required",
+    product_price: "required",
+    avail_mtr: "required",
+    is_avail: "required",
+    hsn_code: "required",
+    colors: "required",
+    brand_id: "required",
+    subcat_id: "required",
+  };
+  let productValidation = new Validator(requestBody, productValidationRules);
+  if (productValidation.fails()) {
+    return res.status(400).json({
+      error: "product validation failed",
+      message: productValidation.errors.all(),
+    });
+  }
+
   let newProduct = await ProductModel.create({
     product_name: requestBody.product_name,
     product_price: requestBody.product_price,
@@ -566,6 +585,49 @@ export const GETProductById = async (req, res) => {
       res.status(400).json({
         message: "Unable to get product",
         error: err,
+      });
+    });
+};
+export const POSTUpdateProduct = async (req, res) => {
+  let id = req.params.id;
+  let requestBody = req.body;
+  let user = req.user;
+
+  let productValidationRules = {
+    product_name: "required",
+    product_price: "required",
+    avail_mtr: "required",
+    is_avail: "required",
+    hsn_code: "required",
+    colors: "required",
+    brand_id: "required",
+    subcat_id: "required",
+  };
+  let productValidation = new Validator(requestBody, productValidationRules);
+  if (productValidation.fails()) {
+    return res.status(400).json({
+      error: "product validation failed",
+      message: productValidation.errors.all(),
+    });
+  }
+  if (user.role != "admin") {
+    return res.status(400).json({
+      error: "Only admins can update Product",
+    });
+  }
+  let updateproduct = await ProductModel.findOneAndUpdate(
+    { _id: id },
+    requestBody
+  )
+    .then((product) => {
+      res.status(200).json({
+        message: "Product updated successfully...",
+        product: product,
+      });
+    })
+    .catch((err) => {
+      res.status(403).json((err) => {
+        error: err;
       });
     });
 };
