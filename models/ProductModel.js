@@ -5,6 +5,7 @@ const ProductSchema = new mongoose.Schema({
   product_price: { type: Number },
   discount_rate: { type: Number },
   avail_mtr: { type: Number },
+  avail_qty: { type: Number },
   is_avail: { type: Boolean, default: true },
   cgst_rate: { type: Number },
   sgst_rate: { type: Number },

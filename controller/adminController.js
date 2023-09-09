@@ -106,6 +106,7 @@ export const POSTAdminLogin = async (req, res) => {
   );
 
   if (!isPasswordValid) {
+    console.log("wrong pw");
     return res.status(400).json({
       error: "Wrong_Password",
       message: "Wrong Password",
@@ -118,6 +119,7 @@ export const POSTAdminLogin = async (req, res) => {
       expiresIn: config.JWT_ACCESS_TOKEN_EXPIRE,
     }
   );
+
   return res.json({
     message: "User Logged in successfully",
     token,
@@ -527,22 +529,23 @@ export const POSTAddProduct = async (req, res) => {
     });
   }
 
-  let newProduct = await ProductModel.create({
-    product_name: requestBody.product_name,
-    product_price: requestBody.product_price,
-    discount_rate: requestBody.discount_rate,
-    avail_mtr: requestBody.avail_mtr,
-    is_avail: requestBody.is_avail,
-    cgst_rate: requestBody.cgst_rate,
-    sgst_rate: requestBody.sgst_rate,
-    igst_rate: requestBody.igst_rate,
-    images: images,
-    hsn_code: requestBody.hsn_code,
-    colors: requestBody.colors,
-    product_desc: requestBody.product_desc,
-    brand_id: requestBody.brand_id,
-    subcat_id: requestBody.subcat_id,
-  })
+  let newProduct = await ProductModel.create(requestBody)
+    // ({
+    //   product_name: requestBody.product_name,
+    //   product_price: requestBody.product_price,
+    //   discount_rate: requestBody.discount_rate,
+    //   avail_mtr: requestBody.avail_mtr,
+    //   is_avail: requestBody.is_avail,
+    //   cgst_rate: requestBody.cgst_rate,
+    //   sgst_rate: requestBody.sgst_rate,
+    //   igst_rate: requestBody.igst_rate,
+    //   images: images,
+    //   hsn_code: requestBody.hsn_code,
+    //   colors: requestBody.colors,
+    //   product_desc: requestBody.product_desc,
+    //   brand_id: requestBody.brand_id,
+    //   subcat_id: requestBody.subcat_id,
+    // })
     .then((product) => {
       res.status(200).json({
         message: "Product Added successfully",
@@ -596,7 +599,7 @@ export const POSTUpdateProduct = async (req, res) => {
   let productValidationRules = {
     product_name: "required",
     product_price: "required",
-    avail_mtr: "required",
+    // avail_mtr: "required",
     is_avail: "required",
     hsn_code: "required",
     colors: "required",
